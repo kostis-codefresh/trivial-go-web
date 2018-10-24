@@ -1,0 +1,22 @@
+version: '1.0'
+stages:
+- build
+- push
+steps:
+  MyAppDockerImage:
+    title: Building Docker Image
+    stage: 'build'
+    type: build
+    image_name: trivial-go-web
+    working_directory: ./
+    tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
+    dockerfile: Dockerfile.multistage
+  jfrog_PushingTo_jfrog_BintrayRegistry:
+    stage: 'push'
+    type: push
+    title: jfrog_Pushing To Bintray Registry
+    candidate: ${{MyAppDockerImage}}
+    tag: '${{CF_SHORT_REVISION}}'
+    registry: bintray 
+     
+   
